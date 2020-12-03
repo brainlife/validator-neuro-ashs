@@ -26,3 +26,5 @@ if os.path.lexists("secondary/qa"):
     os.remove("secondary/qa")
 os.symlink("../"+ashs_dir+"/qa", "secondary/qa")
 
+with open("product.json", "w") as fp:
+    json.dump(results, fp)
