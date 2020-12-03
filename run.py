@@ -2,15 +2,27 @@
 
 import os
 import json
-from shutil import copytree
 
 results = {"errors": [], "warnings": []}
 
-src_dir = 'output/ashs'
-sec_dir = 'secondary'
+with open('config.json') as config_f:
+    config = json.load(config_f)
+    ashs_dir = config["ashs"]
 
-if not os.listdir(src_dir):
+if not os.listdir(ashs_dir):
     results['errors'].append("Output directory is empty")
 
-qa_dir = src_dir + '/qa'
-copytree(qa_dir, sec_dir)
+#bypass output
+if not os.path.exists("output"):
+    os.mkdir("output")
+if os.path.lexists("output/ashs"):
+    os.remove("output/ashs")
+os.symlink("../"+ashs_dir, "output/ashs")
+
+#copy qa directory frmo ashs
+if not os.path.exists("secondary"):
+    os.mkdir("secondary")
+if os.path.lexists("secondary/qa"):
+    os.remove("secondary/qa")
+os.symlink("../"+ashs_dir+"/qa", "secondary/qa")
+
